@@ -205,11 +205,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" required />
-                        <a asp-controller="Account" asp-action="ForgotPassword" class="forgot-link">Forgot Password?</a>
-                    </div>
-
+    <label>Password</label>
+    <!-- Idinagdag natin ang placeholder dito -->
+    <input type="password" name="password" class="form-control" placeholder="Enter your password" required />
+    <a asp-controller="Account" asp-action="ForgotPassword" class="forgot-link">Forgot Password?</a>
+</div>
                     <button type="submit" class="btn-signin">Sign In</button>
 
                     <div class="stay-signed-in">

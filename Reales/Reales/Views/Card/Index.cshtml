@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Magic Card Search</title>
+    <title>Scryfall Magic Card Search</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <style>
         * {
@@ -20,51 +20,51 @@
         }
 
         body {
-            background: linear-gradient(180deg, #1b1625 0%, #3a223f 100%);
-            color: #ffffff;
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
+            background-color: #1a1625;
+            color: #ffffff;
             overflow-x: hidden;
         }
 
-        .top-nav {
-            display: flex;
-            justify-content: flex-end;
-            padding: 20px 40px;
-        }
-
-            .top-nav a {
-                color: #a08ba8;
-                text-decoration: none;
-                margin-left: 20px;
-                font-weight: 500;
-                font-size: 14px;
-            }
-
-                .top-nav a:hover {
-                    color: #ffffff;
-                }
-
-        .search-container {
+        /* --- MAIN CONTENT AREA (Purple Background) --- */
+        .main-wrapper {
+            flex: 1;
+            background: linear-gradient(180deg, #2b1f36 0%, #3a223f 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
+            position: relative;
+            padding-bottom: 220px; 
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 80px;
             z-index: 10;
         }
 
         .headline {
             font-size: 26px;
-            font-weight: 400;
+            font-weight: 300;
             margin-bottom: 24px;
             text-align: center;
+            letter-spacing: 0.5px;
+            color: #e5dfee;
+        }
+
+        .headline strong {
+            font-weight: 600;
+            color: #ffffff;
         }
 
         .search-form {
             width: 100%;
-            max-width: 600px;
         }
 
         .input-wrapper {
@@ -74,36 +74,124 @@
 
         .search-input {
             width: 100%;
-            height: 48px;
-            background-color: #17111c;
+            height: 52px;
+            background-color: #1f1629;
             border: 1px solid #4a3455;
             border-radius: 4px;
             color: #ffffff;
             font-size: 16px;
-            padding: 10px 15px 10px 45px;
+            padding: 10px 15px 10px 55px;
             outline: none;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
+            transition: border-color 0.2s;
         }
 
-            .search-input:focus {
-                border-color: #8c6a9c;
-            }
+        .search-input:focus {
+            border-color: #8c6a9c;
+        }
 
+        /* Custom Scryfall Logo Icon */
         .search-icon {
             position: absolute;
-            left: 12px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            width: 22px;
-            height: 22px;
-            background-color: #e4e4e4;
+            width: 28px;
+            height: 28px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .search-icon::before {
+            content: "";
+            width: 18px;
+            height: 18px;
+            background: repeating-linear-gradient(
+                -45deg,
+                #ffffff,
+                #ffffff 2px,
+                #4a2c55 2px,
+                #4a2c55 4px
+            );
             border-radius: 50%;
         }
 
-        /* Results Section (Lilitaw kapag may nasearch) */
+        /* Action Buttons */
+        .search-actions {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 14px;
+        }
+
+        .btn-scryfall {
+            background-color: transparent;
+            border: 1px solid #6b557a;
+            color: #c9bccc;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .btn-scryfall:hover {
+            background-color: #3b2e49;
+            color: #ffffff;
+        }
+
+        /* Previews & Links */
+        .previews-section {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .preview-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .badge-new {
+            background-color: #e65c00;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .badge-new-blue {
+            background-color: #0088cc;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .previews-section a {
+            color: #d1b8e0;
+            text-decoration: none;
+        }
+
+        .previews-section a:hover {
+            text-decoration: underline;
+            color: #ffffff;
+        }
+
+        /* Results Section */
         .results-section {
             width: 90%;
             max-width: 1100px;
-            margin: 20px auto 50px auto;
+            margin: 40px auto;
             background: #ffffff;
             color: #000000;
             border-radius: 8px;
@@ -112,153 +200,272 @@
             z-index: 20;
         }
 
-        /* Live Cards Fan Design sa Ibaba */
+        /* 7 Live Cards Fan - FIXED Z-INDEX PARA PUMATONG SA FOOTER */
         .cards-fan {
-            position: fixed;
-            bottom: -30px;
+            position: absolute;
+            bottom: -50px; 
             left: 0;
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: flex-end;
             pointer-events: none;
-            z-index: 1;
+            z-index: 30; /* Mahalaga ito: mas mataas sa footer na z-index: 20 */
         }
 
-            .cards-fan img {
-                width: 190px;
-                border-radius: 9px;
-                box-shadow: 0 5px 25px rgba(0,0,0,0.6);
-                margin: 0 -25px;
-                transition: transform 0.3s;
-            }
+        .cards-fan img {
+            width: 155px;
+            border-radius: 8px;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.6);
+            margin: 0 -18px;
+        }
 
-                .cards-fan img:nth-child(1) {
-                    transform: translateY(20px) rotate(-4deg);
-                }
+        .cards-fan img:nth-child(1) { transform: translateY(35px) rotate(-8deg); z-index: 1; }
+        .cards-fan img:nth-child(2) { transform: translateY(15px) rotate(-4deg); z-index: 2; }
+        .cards-fan img:nth-child(3) { transform: translateY(5px) rotate(-1deg); z-index: 3; }
+        .cards-fan img:nth-child(4) { transform: translateY(0px) rotate(1deg); z-index: 4; }
+        .cards-fan img:nth-child(5) { transform: translateY(10px) rotate(3deg); z-index: 3; }
+        .cards-fan img:nth-child(6) { transform: translateY(25px) rotate(6deg); z-index: 2; }
+        .cards-fan img:nth-child(7) { transform: translateY(40px) rotate(9deg); z-index: 1; }
 
-                .cards-fan img:nth-child(2) {
-                    transform: translateY(5px) rotate(-2deg);
-                }
+        /* --- FOOTER AREA --- */
+        .site-footer {
+            background-color: #19151c; 
+            padding: 40px 20px 60px 20px;
+            position: relative;
+            z-index: 20; /* Mas mababa sa cards-fan na 30 */
+        }
 
-                .cards-fan img:nth-child(3) {
-                    transform: translateY(-5px) rotate(0deg);
-                }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            max-width: 1000px;
+            margin: 0 auto;
+            gap: 20px;
+        }
 
-                .cards-fan img:nth-child(4) {
-                    transform: translateY(5px) rotate(2deg);
-                }
+        .footer-col h6 {
+            font-size: 11px;
+            color: #dcd0e3;
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
 
-                .cards-fan img:nth-child(5) {
-                    transform: translateY(20px) rotate(4deg);
-                }
+        .footer-col hr {
+            border-color: #3b2e49;
+            margin: 0 0 12px 0;
+            opacity: 0.5;
+        }
 
-        @@media (max-width: 768px) {
-            .cards-fan {
-                display: none;
-            }
-            /* Itatago sa maliit na screen para hindi sumikip */
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-col li {
+            margin-bottom: 6px;
+        }
+
+        .footer-col a {
+            color: #b5a8c2;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        @@media (max-width: 900px) {
+            .cards-fan { display: none; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+        }
+        @@media (max-width: 500px) {
+            .footer-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div class="top-nav">
-        <a asp-controller="Account" asp-action="Login">Log In</a>
-        <a asp-controller="Account" asp-action="Register">Register</a>
-    </div>
-
-    <!-- Search Box Section -->
-    <div class="search-container">
-        <h1 class="headline">Scryfall is a powerful <strong>Magic: The Gathering</strong> card search</h1>
-
-        <form asp-controller="Card" asp-action="Index" method="post" class="search-form">
-            <div class="input-wrapper">
-                <div class="search-icon"></div>
-                <input type="text" name="searchQuery" class="search-input" autofocus autocomplete="off" placeholder="Search for cards..." required />
-            </div>
-        </form>
-    </div>
-
-    <!-- Results Display Section (Kung may nasearch na) -->
-    @if (Model != null && Model.Any())
-    {
-        <div class="results-section">
-            <h4 class="mb-3">Found @Model.Count cards:</h4>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="list-group shadow-sm" style="max-height: 500px; overflow-y: auto;">
-                        @for (int i = 0; i < Model.Count; i++)
-                        {
-                            <button type="button" class="list-group-item list-group-item-action @(i == 0 ? "active" : "")"
-                                    onclick="showCardDetails(@i)">
-                                @Model[i].Name
-                            </button>
-                        }
-                    </div>
+    <!-- Main Purple Area -->
+    <div class="main-wrapper">
+        
+        <!-- Search Section -->
+        <div class="search-container">
+            <h1 class="headline">Scryfall is a powerful <strong>Magic: The Gathering</strong> card search</h1>
+            
+            <form asp-controller="Card" asp-action="Index" method="post" class="search-form">
+                <div class="input-wrapper">
+                    <div class="search-icon"></div>
+                    <input type="text" name="searchQuery" class="search-input" autofocus autocomplete="off" required />
                 </div>
+            </form>
 
-                <div class="col-md-8">
-                    @for (int i = 0; i < Model.Count; i++)
-                    {
-                        var card = Model[i];
-                        <div id="details-@i" class="card-details-pane" style="display: @(i == 0 ? "block" : "none");">
-                            <h2 class="fw-bold">@card.Name</h2>
-                            <p class="text-muted">@card.TypeLine</p>
+            <div class="search-actions">
+                <a href="#" class="btn-scryfall">Advanced Search</a>
+                <a href="#" class="btn-scryfall">Syntax Guide</a>
+                <a href="#" class="btn-scryfall">All Sets</a>
+                <a href="#" class="btn-scryfall">Random Card</a>
+            </div>
 
-                            <div class="row mt-3">
-                                <div class="col-md-5">
-                                    @if (!string.IsNullOrEmpty(card.ImageUrl))
-                                    {
-                                        <img src="@card.ImageUrl" class="img-fluid rounded shadow" alt="@card.Name" />
-                                    }
-                                    else
-                                    {
-                                        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 300px;">
-                                            <span class="text-muted">No Image Available</span>
-                                        </div>
-                                    }
-                                </div>
-                                <div class="col-md-7">
-                                    <h6 class="fw-bold text-muted">Rules text</h6>
-                                    <p style="white-space: pre-wrap;">@card.OracleText</p>
-
-                                    @if (!string.IsNullOrEmpty(card.FlavorText))
-                                    {
-                                        <p class="text-muted fst-italic">"@card.FlavorText"</p>
-                                    }
-
-                                    <div class="mt-4 pt-3 border-top text-muted">
-                                        @if (!string.IsNullOrEmpty(card.PowerToughness))
-                                        {
-                                            <span class="me-3 fw-bold text-dark">@card.PowerToughness</span>
-                                        }
-                                        <span class="me-3 text-uppercase">@card.Set</span>
-                                        <span class="text-capitalize">@card.Rarity</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
+            <div class="previews-section">
+                <div class="preview-row">
+                    <span class="badge-new">NEW</span>
+                    <a href="#">The Hobbit previews</a>
+                </div>
+                <div class="preview-row">
+                    <span class="badge-new">NEW</span>
+                    <a href="#">The Hobbit Eternal previews</a>
+                </div>
+                <div class="preview-row">
+                    <span class="badge-new-blue">NEW</span>
+                    <a href="#">Star Trek first look</a>
+                </div>
+                <div class="mt-1">
+                    <a href="#">Help Good Law Project fight for Trans Rights in the UK</a>
                 </div>
             </div>
         </div>
-    }
 
-    <!-- Live Cards Design sa Ibaba -->
-    <div class="cards-fan">
-        <img src="https://cards.scryfall.io/normal/front/2/2/227cea1b-ce67-4fd8-9815-92571bface42.jpg" alt="Shivan Dragon" />
-        <img src="https://cards.scryfall.io/normal/front/a/4/a457f404-ddf1-40fa-b0f0-23c8598533f4.jpg" alt="Counterspell" />
-        <img src="https://cards.scryfall.io/normal/front/b/d/bd8fa327-dd41-4737-8f19-2cf5eb1f7cdd.jpg" alt="Black Lotus" />
-        <img src="https://cards.scryfall.io/normal/front/0/6/06ec9e8b-4bd8-46b5-9661-2c2e8717df39.jpg" alt="Giant Growth" />
-        <img src="https://cards.scryfall.io/normal/front/c/e/ce711943-c1a1-43a0-8b89-8d169cfb8e06.jpg" alt="Lightning Bolt" />
+        <!-- API Results Section -->
+        @if (Model != null && Model.Any())
+        {
+            <div class="results-section">
+                <h4 class="mb-3">Found @Model.Count cards:</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="list-group shadow-sm" style="max-height: 500px; overflow-y: auto;">
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <button type="button" class="list-group-item list-group-item-action @(i == 0 ? "active" : "")" 
+                                        onclick="showCardDetails(@i)">
+                                    @Model[i].Name
+                                </button>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var card = Model[i];
+                            <div id="details-@i" class="card-details-pane" style="display: @(i == 0 ? "block" : "none");">
+                                <h2 class="fw-bold">@card.Name</h2>
+                                <p class="text-muted">@card.TypeLine</p>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-5">
+                                        @if (!string.IsNullOrEmpty(card.ImageUrl))
+                                        {
+                                            <img src="@card.ImageUrl" class="img-fluid rounded shadow" alt="@card.Name" />
+                                        }
+                                    </div>
+                                    <div class="col-md-7">
+                                        <h6 class="fw-bold text-muted">Rules text</h6>
+                                        <p style="white-space: pre-wrap;">@card.OracleText</p>
+                                        @if (!string.IsNullOrEmpty(card.FlavorText))
+                                        {
+                                            <p class="text-muted fst-italic">"@card.FlavorText"</p>
+                                        }
+                                        <div class="mt-4 pt-3 border-top text-muted">
+                                            @if (!string.IsNullOrEmpty(card.PowerToughness))
+                                            {
+                                                <span class="me-3 fw-bold text-dark">@card.PowerToughness</span>
+                                            }
+                                            <span class="me-3 text-uppercase">@card.Set</span>
+                                            <span class="text-capitalize">@card.Rarity</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- 7 Bottom Cards -->
+        <div class="cards-fan">
+            <img src="https://cards.scryfall.io/normal/front/1/7/17d3b5b6-231a-4286-9a03-ea7db5be60ea.jpg" alt="Dwarven Recruiter" />
+            <img src="https://cards.scryfall.io/normal/front/3/b/3bc229a4-56b0-4493-bc42-f9037c68832a.jpg" alt="Alora, Merry Thief" />
+            <img src="https://cards.scryfall.io/normal/front/2/2/227cea1b-ce67-4fd8-9815-92571bface42.jpg" alt="Goblin King" />
+            <img src="https://cards.scryfall.io/normal/front/a/7/a7c6183e-1b48-4384-90aa-9a720db1dd47.jpg" alt="Cold-Eyed Selkie" />
+            <img src="https://cards.scryfall.io/normal/front/8/e/8e7f12a1-aa8e-4a6c-9c94-d2e8db50d75b.jpg" alt="Dragon Sniper" />
+            <img src="https://cards.scryfall.io/normal/front/f/5/f50e7b95-a131-4a49-9f4a-0a4e76092520.jpg" alt="Apprentice Wizard" />
+            <img src="https://cards.scryfall.io/normal/front/9/a/9a4ff1db-d65e-4efb-a251-5ee42848c084.jpg" alt="Decadent Dragon" />
+        </div>
     </div>
+
+    <!-- Exact Scryfall Footer -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h6>CARDS</h6>
+                <hr />
+                <ul>
+                    <li><a href="#">Advanced Search</a></li>
+                    <li><a href="#">Syntax Guide</a></li>
+                    <li><a href="#">All Sets</a></li>
+                    <li><a href="#">Random Card</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h6>SCRYFALL</h6>
+                <hr />
+                <ul>
+                    <li><a href="#">Slack & Discord Bots</a></li>
+                    <li><a href="#">Site FAQs & Help</a></li>
+                    <li><a href="#">Scryfall Blog</a></li>
+                    <li><a href="#">Scryfall Tagger</a></li>
+                    <li><a href="#">MTG Wiki</a></li>
+                    <li><a href="#">Art Game</a></li>
+                    <li><a href="#">April Fools Archive</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h6>ACCOUNT</h6>
+                <hr />
+                <ul>
+                    <li><a href="#">Your Account</a></li>
+                    <li><a href="#">Register</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy & Security</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h6>DEVELOPERS</h6>
+                <hr />
+                <ul>
+                    <li><a href="#">API Documentation</a></li>
+                    <li><a href="#">Card Objects</a></li>
+                    <li><a href="#">Card Imagery</a></li>
+                    <li><a href="#">Bulk Data</a></li>
+                    <li><a href="#">API Changelog</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h6>MORE</h6>
+                <hr />
+                <ul>
+                    <li><a href="#">Our Team</a></li>
+                    <li><a href="#">Donate to Scryfall</a></li>
+                    <li><a href="#">Patreon</a></li>
+                    <li><a href="#">Bluesky</a></li>
+                    <li><a href="#">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
 
     <script>
         function showCardDetails(index) {
             document.querySelectorAll('.card-details-pane').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.list-group-item').forEach(el => el.classList.remove('active'));
-
             document.getElementById('details-' + index).style.display = 'block';
             event.currentTarget.classList.add('active');
         }
