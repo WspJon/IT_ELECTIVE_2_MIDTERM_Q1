@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-5">
+                <h2 class="text-center fw-bold mb-4">Create Account</h2>
+
+                <!-- Nilagyan natin ng asp-action at method="post" -->
+                <form asp-action="Register" method="post">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Username</label>
+                        <!-- Pinalitan ang type="email" ng type="text" at nagdagdag ng name="username" -->
+                        <input type="text" name="username" class="form-control" placeholder="Choose a username" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Password</label>
+                        <!-- Nagdagdag ng name="password" para mabasa ng system -->
+                        <input type="password" name="password" class="form-control" placeholder="Create a password" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Confirm Password</label>
+                        <input type="password" name="confirmPassword" class="form-control" placeholder="Confirm your password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-bold">Submit Registration</button>
+                </form>
+
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <p>Already have an account? <a asp-controller="Account" asp-action="Login" class="text-decoration-none fw-bold">Log in here</a></p>
+        </div>
+    </div>
+</div>
